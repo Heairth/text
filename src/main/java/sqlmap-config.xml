@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<typeAlias type="com.hetianhao.entity.Movie" alias="movie"/>
+		<typeAlias type="com.hetianhao.entity.M_D" alias="md"/>
+		<typeAlias type="com.hetianhao.entity.Dept" alias="dept"/>
+	</typeAliases>
+	<!-- 添加分页插件 -->
+	<plugins>
+	     <plugin interceptor="com.github.pagehelper.PageHelper">
+	       <property name="dialect" value="mysql"></property>
+	     </plugin>
+	</plugins>
+	
+	<mappers>
+		<mapper resource="com/hetianhao/mapper/MovieMapper.xml"></mapper>
+	</mappers>
+	
+</configuration> 

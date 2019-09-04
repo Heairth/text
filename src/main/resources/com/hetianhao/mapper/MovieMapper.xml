@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="com.hetianhao.mapper.MovieDao">
+ 	<!-- 列表sql -->
+ 	<select id="findAll" resultType="movie">
+ 		select m.mid,m.mname,m.mjs,m.doctor,d.dname,m.mdate
+		from movie m,dept d,m_d md
+		where m.mid=md.mid
+		and d.did=md.did
+		<if test="mname!=null and mname!=''">
+		and m.mname like concat("%",#{mname},"%")
+		</if>
+		group by m.mid
+ 	</select>
+ 	<!-- 删除电影sql -->
+ 	<delete id="deleteone">
+ 		delete from movie where mid in
+ 		<foreach collection="array" open="(" close=")" separator="," item="mid">
+ 		#{mid}
+ 		</foreach>
+ 	</delete>
+ 	<!-- 删除中间表sql -->
+ 	<delete id="deletetwo">
+ 		delete from m_d where mid in
+ 		<foreach collection="array" open="(" close=")" separator="," item="mid">
+ 		#{mid}
+ 		</foreach>
+ 	</delete>
+ 	<!-- 添加 -->
+ 	<insert id="insertone" useGeneratedKeys="true" keyProperty="mid">
+ 	insert into movie(mname,mjs,doctor,mdate) values(#{mname},#{mjs},#{doctor},#{mdate})
+ 	</insert>
+ 	<insert id="inserttwo" useGeneratedKeys="true" keyProperty="did">
+ 	insert into dept(dname) values(#{dname})
+ 	</insert>
+ 	<insert id="insertthree" parameterType="int">
+ 	insert into m_d(mid,did) values(#{0},#{1})
+ 	</insert>
+ 	<!-- 回显 -->
+ 	<select id="huixian" resultType="movie" parameterType="int">
+ 	select m.mid,m.mname,m.mjs,m.doctor,d.dname,m.mdate
+	from movie m,dept d,m_d md
+	where m.mid=md.mid
+	and d.did=md.did
+	and m.mid=#{0}
+	group by m.mid
+ 	</select>
+ 	<!-- 修改 -->
+ 	<update id="update" parameterType="movie">
+ 	update movie set mname=#{mname},mjs=#{mjs},doctor=#{doctor},mdate=#{mdate} where mid=#{mid}
+ 	</update>
+ </mapper>
